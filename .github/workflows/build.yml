@@ -4,9 +4,9 @@ on:
   push:
   workflow_dispatch:
     inputs:
-      XRAY_CORE_VERSION: 1.8.7
-        description: 'Xray core version or commit hash'
-        required: false
+      XRAY_CORE_VERSION: 
+      description: 'Xray core version or commit hash'
+      required: false
 
 
 jobs:
@@ -30,6 +30,7 @@ jobs:
 
     - name: Install gomobile
       run: |
+        sudo apt install zip unzip
         go install golang.org/x/mobile/cmd/gomobile@latest
         echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
 
@@ -49,6 +50,9 @@ jobs:
         go mod tidy -v
         gomobile bind -v -androidapi 19 -ldflags='-s -w' ./
         cp *.aar ${{ github.workspace }}/V2rayNG/app/libs/
+        cd ${{ github.workspace }}/V2rayNG/app/libs
+        zip files *.arr
+        
 
     - name: Build APK
       run: |
@@ -61,4 +65,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: apk
-        path: ${{ github.workspace }}/V2rayNG/app/build/outputs/apk/debug/
+        path: ${{ github.workspace }}/V2rayNG/app/libs/files.zip
