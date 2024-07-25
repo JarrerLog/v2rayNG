@@ -54,7 +54,7 @@ jobs:
         zip files *.aar
         
 
-    - name: Build APK
+    - name: Build APKS
       run: |
         cd ${{ github.workspace }}/V2rayNG
         chmod 777 *
